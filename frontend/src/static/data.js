@@ -21,7 +21,7 @@ export const categoriesData = [
     title: "Фрукты",
     subTitle: "",
     image_Url:
-      "https://kartinki.pics/uploads/posts/2022-03/thumbs/1647118473_3-kartinkin-net-p-kartinki-frukti-na-belom-fone-3.png",
+      "https://cdn.nedelia.az/uploaded/2022/8/27/5530bfd8-0709-4134-ab03-1c72b149c6ae/meyv.jpg",
   },
   {
     id: 4,
