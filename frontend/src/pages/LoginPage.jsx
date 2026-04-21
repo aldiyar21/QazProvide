@@ -1,23 +1,26 @@
-import React, { useEffect } from 'react'
-import Login from '../components/Login/Login'
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import Login from "../components/Login/Login";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const { isAuthenticated } = useSelector((state) => state.user);
-    // if user is login then redirect to home page
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate("/");
-        }
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isSeller } = useSelector((state) => state.seller);
 
-    })
-    return (
-        <div>
-            <Login />
-        </div>
-    )
-}
+  useEffect(() => {
+    if (isSeller) {
+      navigate("/dashboard");
+    } else if (isAuthenticated) {
+      navigate(user?.role === "Admin" ? "/admin/dashboard" : "/");
+    }
+  }, [isAuthenticated, isSeller, navigate, user]);
 
-export default LoginPage
+  return (
+    <div>
+      <Login />
+    </div>
+  );
+};
+
+export default LoginPage;

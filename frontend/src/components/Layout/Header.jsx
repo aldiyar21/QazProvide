@@ -24,20 +24,21 @@ const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { isSeller } = useSelector((state) => state.seller);
   const { allProducts } = useSelector((state) => state.products);
+  const isAdmin = user?.role === "Admin";
+  const isShoppingRestricted = isSeller || isAdmin;
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
-  const [open, setOpen] = useState(false); // mobile menu
+  const [open, setOpen] = useState(false);
 
-  // Handle search change
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
-    // Filter products
     const filteredProducts =
       allProducts &&
       allProducts.filter((product) =>
@@ -46,7 +47,6 @@ const Header = ({ activeHeading }) => {
     setSearchData(filteredProducts);
   };
 
-  // Handle search close
   const handleSearchClose = () => {
     setSearchTerm("");
     setSearchData(null);
@@ -54,11 +54,7 @@ const Header = ({ activeHeading }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 70) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
+      setActive(window.scrollY > 70);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -67,8 +63,8 @@ const Header = ({ activeHeading }) => {
 
   return (
     <>
-      <div className="w-11/12 mx-auto" >
-        <div className="hidden 800px:flex items-center justify-between" >
+      <div className="w-11/12 mx-auto">
+        <div className="hidden 800px:flex items-center justify-between">
           <div>
             <Link to="/">
               <div className={styles.logoContainer}>
@@ -81,7 +77,7 @@ const Header = ({ activeHeading }) => {
               </div>
             </Link>
           </div>
-          {/* Search box */}
+
           <div className="w-[30%] relative">
             <input
               type="text"
@@ -104,7 +100,11 @@ const Header = ({ activeHeading }) => {
                   />
                 </div>
                 {searchData.map((i) => (
-                  <Link to={`/product/${i._id}`} key={i._id} onClick={handleSearchClose}>
+                  <Link
+                    to={`/product/${i._id}`}
+                    key={i._id}
+                    onClick={handleSearchClose}
+                  >
                     <div className="w-full flex items-start py-3">
                       <img
                         src={`${backend_url}${i.images[0]}`}
@@ -118,12 +118,9 @@ const Header = ({ activeHeading }) => {
               </div>
             )}
           </div>
-          {/* Search end */}
         </div>
       </div>
 
-
-      {/* 2nd part of header start */}
       <div
         className={`${
           active ? "shadow-sm fixed top-0 left-0 z-10" : ""
@@ -132,7 +129,6 @@ const Header = ({ activeHeading }) => {
         <div
           className={`${styles.section} relative ${styles.normalFlex} justify-between`}
         >
-          {/* Categories */}
           <div onClick={() => setDropDown(!dropDown)}>
             <div className="relative h-[40px] mt-[10px] w-[270px] hidden 1000px:block">
               <BiMenuAltLeft size={30} className="absolute top-2 left-2" />
@@ -150,40 +146,47 @@ const Header = ({ activeHeading }) => {
             </div>
           </div>
 
-          {/* NavItems */}
           <div className={`${styles.normalFlex}`}>
-            <Navbar active={activeHeading} isSeller={isSeller} />
+            <Navbar
+              active={activeHeading}
+              isSeller={isSeller}
+              isAuthenticated={isAuthenticated}
+              isAdmin={isAdmin}
+            />
           </div>
 
           <div className="flex">
-            <div className={`${styles.normalFlex}`}>
-              <div
-                className="relative cursor-pointer mr-[15px]"
-                onClick={() => setOpenWishlist(true)}
-              >
-                <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
-                <span className="absolute right-0 top-0 rounded-full bg-[#ffffff] w-4 h-4 top right p-0 m-0 text-black font-mono text-[12px] leading-tight text-center">
-                  {wishlist && wishlist.length}
-                </span>
+            {!isShoppingRestricted && (
+              <div className={`${styles.normalFlex}`}>
+                <div
+                  className="relative cursor-pointer mr-[15px]"
+                  onClick={() => setOpenWishlist(true)}
+                >
+                  <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
+                  <span className="absolute right-0 top-0 rounded-full bg-[#ffffff] w-4 h-4 top right p-0 m-0 text-black font-mono text-[12px] leading-tight text-center">
+                    {wishlist && wishlist.length}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className={`${styles.normalFlex}`}>
-              <div
-                className="relative cursor-pointer mr-[15px]"
-                onClick={() => setOpenCart(true)}
-              >
-                <AiOutlineShoppingCart
-                  size={30}
-                  color="rgb(255 255 255 / 83%)"
-                />
-                <span className="absolute right-0 top-0 rounded-full bg-[#ffffff] w-4 h-4 top right p-0 m-0 text-black font-mono text-[12px] leading-tight text-center">
-                  {cart && cart.length}
-                </span>
+            {!isShoppingRestricted && (
+              <div className={`${styles.normalFlex}`}>
+                <div
+                  className="relative cursor-pointer mr-[15px]"
+                  onClick={() => setOpenCart(true)}
+                >
+                  <AiOutlineShoppingCart
+                    size={30}
+                    color="rgb(255 255 255 / 83%)"
+                  />
+                  <span className="absolute right-0 top-0 rounded-full bg-[#ffffff] w-4 h-4 top right p-0 m-0 text-black font-mono text-[12px] leading-tight text-center">
+                    {cart && cart.length}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* avatar */}
             <div className={`${styles.normalFlex}`}>
               <div className="relative cursor-pointer mr-[15px]">
                 {isAuthenticated ? (
@@ -195,25 +198,21 @@ const Header = ({ activeHeading }) => {
                     />
                   </Link>
                 ) : (
-                  <Link to="/login">
+                  <Link to="/login?role=user">
                     <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
                   </Link>
                 )}
               </div>
             </div>
-            {/* Avatar end */}
-            {/* card popup start */}
-            {openCart && <Cart setOpenCart={setOpenCart} />}
-            {/* card popup end */}
 
-            {/* Wish list pop up Start */}
-            {openWishlist && <Wishlist setOpenWishlist={setOpenWishlist} />}
-            {/* Wish list pop up end */}
+            {!isShoppingRestricted && openCart && <Cart setOpenCart={setOpenCart} />}
+            {!isShoppingRestricted && openWishlist && (
+              <Wishlist setOpenWishlist={setOpenWishlist} />
+            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Header */}
       <div
         className={`${
           active ? "shadow-sm fixed top-0 left-0 z-10" : ""
@@ -240,40 +239,43 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
 
-          <div>
-            <div
-              className="relative mr-[20px]"
-              onClick={() => setOpenCart(true)}
-            >
-              <AiOutlineShoppingCart size={30} />
-              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                {cart && cart.length}
-              </span>
+          {!isShoppingRestricted && (
+            <div>
+              <div
+                className="relative mr-[20px]"
+                onClick={() => setOpenCart(true)}
+              >
+                <AiOutlineShoppingCart size={30} />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  {cart && cart.length}
+                </span>
+              </div>
             </div>
-          </div>
-          {/* cart popup */}
-          {openCart && <Cart setOpenCart={setOpenCart} />}
+          )}
 
-          {/* wishlist popup */}
-          {openWishlist && <Wishlist setOpenWishlist={setOpenWishlist} />}
+          {!isShoppingRestricted && openCart && <Cart setOpenCart={setOpenCart} />}
+          {!isShoppingRestricted && openWishlist && (
+            <Wishlist setOpenWishlist={setOpenWishlist} />
+          )}
         </div>
       </div>
 
-      {/* Sidebar */}
       {open && (
-        <div className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}>
+        <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
           <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
             <div className="w-full justify-between flex pr-3">
               <div>
-                <div
-                  className="relative mr-[15px]"
-                  onClick={() => setOpenWishlist(true) || setOpen(false)}
-                >
-                  <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                  <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                    {wishlist && wishlist.length}
-                  </span>
-                </div>
+                {!isShoppingRestricted && (
+                  <div
+                    className="relative mr-[15px]"
+                    onClick={() => setOpenWishlist(true) || setOpen(false)}
+                  >
+                    <AiOutlineHeart size={30} className="mt-5 ml-3" />
+                    <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                      {wishlist && wishlist.length}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <RxCross1
@@ -283,11 +285,10 @@ const Header = ({ activeHeading }) => {
               />
             </div>
 
-            {/* Search Bar */}
             <div className="my-8 w-[92%] m-auto h-[40px relative]">
               <input
                 type="search"
-                placeholder="Search for products"
+                placeholder="Введите название товара..."
                 className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -303,7 +304,11 @@ const Header = ({ activeHeading }) => {
                     />
                   </div>
                   {searchData.map((i) => (
-                    <Link to={`/product/${i._id}`} key={i._id} onClick={handleSearchClose}>
+                    <Link
+                      to={`/product/${i._id}`}
+                      key={i._id}
+                      onClick={handleSearchClose}
+                    >
                       <div className="w-full flex items-start py-3">
                         <img
                           src={`${backend_url}${i.images[0]}`}
@@ -317,12 +322,16 @@ const Header = ({ activeHeading }) => {
                 </div>
               )}
             </div>
-            <Navbar active={activeHeading} />
+            <Navbar
+              active={activeHeading}
+              isSeller={isSeller}
+              isAuthenticated={isAuthenticated}
+              isAdmin={isAdmin}
+            />
             <br />
             <br />
             <br />
 
-            {/* Mobile Login */}
             <div className="flex w-full justify-center">
               {isAuthenticated ? (
                 <div>
@@ -337,12 +346,15 @@ const Header = ({ activeHeading }) => {
               ) : (
                 <>
                   <Link
-                    to="/login"
+                    to="/login?role=user"
                     className="text-[18px] pr-[10px] text-[#000000b7]"
                   >
                     Войти
                   </Link>
-                  <Link to="/sign-up" className="text-[18px] text-[#000000b7]">
+                  <Link
+                    to="/sign-up?role=user"
+                    className="text-[18px] text-[#000000b7]"
+                  >
                     Регистрация
                   </Link>
                 </>

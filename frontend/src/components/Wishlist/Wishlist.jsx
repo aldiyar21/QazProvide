@@ -10,6 +10,9 @@ import styles from "../../styles/styles";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
+  const { user } = useSelector((state) => state.user);
+  const { isSeller } = useSelector((state) => state.seller);
+  const isShoppingRestricted = isSeller || user?.role === "Admin";
   const dispatch = useDispatch();
 
   const removeFromWishlistHandler = (data) => {
@@ -17,6 +20,7 @@ const Wishlist = ({ setOpenWishlist }) => {
   };
 
   const addToCartHandler = (data) => {
+    if (isShoppingRestricted) return;
     const newData = { ...data, qty: 1 };
     dispatch(addTocart(newData));
     setOpenWishlist(false);
@@ -24,7 +28,7 @@ const Wishlist = ({ setOpenWishlist }) => {
 
   const getItemsWord = (count) => {
     if (count === 1) return "предмет";
-    if (count > 1 && count < 10) return "предмета";
+    if (count > 1 && count < 5) return "предмета";
     return "предметов";
   };
 
@@ -39,7 +43,7 @@ const Wishlist = ({ setOpenWishlist }) => {
                 onClick={() => setOpenWishlist(false)}
               />
             </div>
-            <h5>Список понравившихся пуст!</h5>
+            <h5>Список избранного пуст!</h5>
           </div>
         ) : (
           <>
@@ -54,22 +58,21 @@ const Wishlist = ({ setOpenWishlist }) => {
               <div className={`${styles.normalFlex} p-4`}>
                 <AiOutlineHeart size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
-                  В списке {wishlist.length} {getItemsWord(wishlist.length)}
+                  В избранном {wishlist.length} {getItemsWord(wishlist.length)}
                 </h5>
               </div>
               <br />
               <div className="w-full border-t">
                 {wishlist &&
-                  wishlist.map((i, index) => {
-                    return (
-                      <CartSingle
-                        data={i}
-                        key={index}
-                        removeFromWishlistHandler={removeFromWishlistHandler}
-                        addToCartHandler={addToCartHandler}
-                      />
-                    );
-                  })}
+                  wishlist.map((i, index) => (
+                    <CartSingle
+                      data={i}
+                      key={index}
+                      removeFromWishlistHandler={removeFromWishlistHandler}
+                      addToCartHandler={addToCartHandler}
+                      isShoppingRestricted={isShoppingRestricted}
+                    />
+                  ))}
               </div>
             </div>
           </>
@@ -79,8 +82,13 @@ const Wishlist = ({ setOpenWishlist }) => {
   );
 };
 
-const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
-  const [value, setValue] = useState(1);
+const CartSingle = ({
+  data,
+  removeFromWishlistHandler,
+  addToCartHandler,
+  isShoppingRestricted,
+}) => {
+  const [value] = useState(1);
   const totalPrice = data.originalPrice * value;
 
   return (
@@ -98,17 +106,19 @@ const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler }) => {
         <div className="flex-grow pl-[15px]">
           <h1>{data.name}</h1>
           <h4 className="font-[600] pt-3 text-[17px] text-[#2eb857] font-Roboto">
-            {totalPrice}₸
+            {totalPrice} ₸
           </h4>
         </div>
-        <div>
-          <BsCartPlus
-            size={20}
-            className="cursor-pointer"
-            title="Add to cart"
-            onClick={() => addToCartHandler(data)}
-          />
-        </div>
+        {!isShoppingRestricted && (
+          <div>
+            <BsCartPlus
+              size={20}
+              className="cursor-pointer"
+              title="Add to cart"
+              onClick={() => addToCartHandler(data)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
