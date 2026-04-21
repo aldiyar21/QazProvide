@@ -34,6 +34,7 @@ import {
   ShopSettingsPage,
   ShopWithDrawMoneyPage,
   ShopInboxPage,
+  ShopCustomersPage,
 } from "./routes/ShopRoutes";
 
 import {
@@ -252,6 +253,15 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCoupouns />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard-customers"
+          element={
+            <SellerProtectedRoute>
+              <ShopCustomersPage />
             </SellerProtectedRoute>
           }
         />

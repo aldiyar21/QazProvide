@@ -1,6 +1,6 @@
 import React from "react";
 import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
-import { FiPackage, FiShoppingBag } from "react-icons/fi";
+import { FiPackage, FiShoppingBag, FiUsers } from "react-icons/fi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { CiMoneyBill, CiSettings } from "react-icons/ci";
@@ -128,7 +128,19 @@ const DashboardSideBar = ({ active }) => {
         </Link>
       </div>
 
-      
+      <div className="w-full flex items-center p-4">
+        <Link to="/dashboard-customers" className="w-full flex items-center">
+          <FiUsers size={30} color={`${active === 8 ? "crimson" : "#555"}`} />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 8 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Клиенты
+          </h5>
+        </Link>
+      </div>
+
 
       <div className="w-full flex items-center p-4">
         <Link to="/settings" className="w-full flex items-center">
