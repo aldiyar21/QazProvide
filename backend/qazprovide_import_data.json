@@ -1,0 +1,632 @@
+[
+  {
+    "tag": "milk",
+    "name": "Молоко (с.Шортанды)",
+    "price": 550.0,
+    "distributor": "Береке",
+    "reference": "https://www.olx.kz/d/obyavlenie/moloko-iz-shortandy-IDoLuHL.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "smetana",
+    "name": "Сметана Шортанды",
+    "price": 4000.0,
+    "distributor": "Береке",
+    "reference": "https://www.olx.kz/d/obyavlenie/moloko-iz-shortandy-IDoLuHL.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "tvorog",
+    "name": "Творог Шортанды",
+    "price": 1500.0,
+    "distributor": "Береке",
+    "reference": "https://www.olx.kz/d/obyavlenie/moloko-iz-shortandy-IDoLuHL.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "kefir",
+    "name": "Айран",
+    "price": 700.0,
+    "distributor": "Береке",
+    "reference": "https://www.olx.kz/d/obyavlenie/moloko-iz-shortandy-IDoLuHL.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "milk",
+    "name": "Домашнее молоко",
+    "price": 440.0,
+    "distributor": "nasele.kz",
+    "reference": "https://www.instagram.com/nasele.kz/",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "tvorog",
+    "name": "Творог домашний",
+    "price": 1300.0,
+    "distributor": "nasele.kz",
+    "reference": "https://www.instagram.com/nasele.kz/",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "smetana",
+    "name": "Сметана",
+    "price": 3200.0,
+    "distributor": "nasele.kz",
+    "reference": "https://www.instagram.com/nasele.kz/",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "maslo",
+    "name": "Масло домашнее",
+    "price": 6000.0,
+    "distributor": "nasele.kz",
+    "reference": "https://www.instagram.com/nasele.kz/",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "smetana",
+    "name": "Сметана",
+    "price": 2200.0,
+    "distributor": "Евгений",
+    "reference": "https://www.olx.kz/d/obyavlenie/molochnye-produkty-IDoLAx7.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "maslo",
+    "name": "Масло домашнее",
+    "price": 2500.0,
+    "distributor": "Евгений",
+    "reference": "https://www.olx.kz/d/obyavlenie/molochnye-produkty-IDoLAx7.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "tvorog",
+    "name": "Творог",
+    "price": 700.0,
+    "distributor": "Евгений",
+    "reference": "https://www.olx.kz/d/obyavlenie/molochnye-produkty-IDoLAx7.html",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "milk",
+    "name": "Молоко",
+    "price": 400.0,
+    "distributor": "Ольга",
+    "reference": "https://obyavleniya.kaspi.kz/a/domashnyaya-smetana-maslo-tvorog-114861819",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "maslo",
+    "name": "Масло майское",
+    "price": 7000.0,
+    "distributor": "Ольга",
+    "reference": "https://obyavleniya.kaspi.kz/a/domashnyaya-smetana-maslo-tvorog-114861819",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "tvorog",
+    "name": "Домашний творог",
+    "price": 800.0,
+    "distributor": "Ольга",
+    "reference": "https://obyavleniya.kaspi.kz/a/domashnyaya-smetana-maslo-tvorog-114861819",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "smetana",
+    "name": "Сметана",
+    "price": 3500.0,
+    "distributor": "Ольга",
+    "reference": "https://obyavleniya.kaspi.kz/a/domashnyaya-smetana-maslo-tvorog-114861819",
+    "city": "Astana",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "qymyz",
+    "name": "Кымыз",
+    "price": 800.0,
+    "distributor": "Шынар",
+    "reference": "https://www.olx.kz/d/obyavlenie/super-tsena-ymyz-shbat-kymyz-shubat-kumys-verblyuzhe-kobyle-moloko-IDoMyyi.html?",
+    "city": "Almaty",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "shubat",
+    "name": "Шубат",
+    "price": 900.0,
+    "distributor": "Шынар",
+    "reference": "https://www.olx.kz/d/obyavlenie/super-tsena-ymyz-shbat-kymyz-shubat-kumys-verblyuzhe-kobyle-moloko-IDoMyyi.html",
+    "city": "Almaty",
+    "category": "Dairy Products"
+  },
+  {
+    "tag": "potato",
+    "name": "Павлодарская картошка",
+    "price": 80.0,
+    "distributor": "Пользователь",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodam-povladarskuyu-kartoshku-IDoMYC6.html",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картошка красный сорт",
+    "price": 180.0,
+    "distributor": "Berikmusalimov1",
+    "reference": "https://flagma.kz/kartofel-o2187570.html",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картофель домашний",
+    "price": 150.0,
+    "distributor": "Сергей",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodam-kartofel-domashniyy-IDoNXJ5.html",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картофель (с. Озерки)",
+    "price": 90.0,
+    "distributor": "Кайрат",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodam-kartoshku-kartofel-s-ozerki-IDo2fsR.html",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картошка (с. Каражар)",
+    "price": 260.0,
+    "distributor": "Арман",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodam-kartoshku-mestnaya-IDohTex.html",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картошка павлодар сорт Гала",
+    "price": 100.0,
+    "distributor": "Рамазан",
+    "reference": "https://flagma.kz/kartofel-gala-o3702472.html",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "potato",
+    "name": "Картошка павлодар",
+    "price": 135.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "carrot",
+    "name": "Морковь павлодар сорт Абака",
+    "price": 120.0,
+    "distributor": "Рамазан",
+    "reference": "https://www.olx.kz/d/obyavlenie/morkov-pavlodar-abaka-sort-IDoGLy6.html?reason=seller_profile",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "carrot",
+    "name": "Морковь",
+    "price": 180.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "carrot",
+    "name": "Морковь",
+    "price": 180.0,
+    "distributor": "77473614079",
+    "reference": "https://www.olx.kz/d/obyavlenie/ovoschi-frukty-dostavka-IDoouU6.html?reason=ip%7Ccool_rec_platform",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "luk",
+    "name": "Лук",
+    "price": 95.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "luk",
+    "name": "Лук",
+    "price": 85.0,
+    "distributor": "77473614079",
+    "reference": "https://www.olx.kz/d/obyavlenie/ovoschi-frukty-dostavka-IDoouU6.html?reason=ip%7Ccool_rec_platform",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "luk",
+    "name": "Лук павлодар",
+    "price": 90.0,
+    "distributor": "Рамазан",
+    "reference": "https://www.olx.kz/d/obyavlenie/morkov-pavlodar-abaka-sort-IDoGLy6.html?reason=seller_profile",
+    "city": "Astana",
+    "category": "Vegetables"
+  },
+  {
+    "tag": "apple",
+    "name": "Яблоко Алмата лимонка",
+    "price": 480.0,
+    "distributor": "77473614079",
+    "reference": "https://www.olx.kz/d/obyavlenie/ovoschi-frukty-dostavka-IDoouU6.html?reason=ip%7Ccool_rec_platform",
+    "city": "Astana",
+    "category": "Fruits"
+  },
+  {
+    "tag": "apple",
+    "name": "Яблоко апорт Алматы",
+    "price": 630.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Fruits"
+  },
+  {
+    "tag": "apple",
+    "name": "Яблоки гала",
+    "price": 630.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Fruits"
+  },
+  {
+    "tag": "pineapple",
+    "name": "Груша конференция",
+    "price": 1180.0,
+    "distributor": "77473614079",
+    "reference": "https://www.olx.kz/d/obyavlenie/ovoschi-frukty-dostavka-IDoouU6.html?reason=ip%7Ccool_rec_platform",
+    "city": "Astana",
+    "category": "Fruits"
+  },
+  {
+    "tag": "pineapple",
+    "name": "Груша дюшес ящик",
+    "price": 6000.0,
+    "distributor": "Фрукты-овощи от Нурика",
+    "reference": "https://www.instagram.com/frukti_ovoshi_ot_nurik/",
+    "city": "Almaty",
+    "category": "Fruits"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца супер отборка",
+    "price": 66.0,
+    "distributor": "Иртышская птицефабрика",
+    "reference": "https://www.olx.kz/d/obyavlenie/v-prodazhe-yaytsa-vseh-kategoriy-IDo7azi.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца отборка",
+    "price": 61.0,
+    "distributor": "Иртышская птицефабрика",
+    "reference": "https://www.olx.kz/d/obyavlenie/v-prodazhe-yaytsa-vseh-kategoriy-IDo7azi.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца с1",
+    "price": 59.0,
+    "distributor": "Иртышская птицефабрика",
+    "reference": "https://www.olx.kz/d/obyavlenie/v-prodazhe-yaytsa-vseh-kategoriy-IDo7azi.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца с2",
+    "price": 50.0,
+    "distributor": "Иртышская птицефабрика",
+    "reference": "https://www.olx.kz/d/obyavlenie/v-prodazhe-yaytsa-vseh-kategoriy-IDo7azi.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца с3",
+    "price": 32.0,
+    "distributor": "Иртышская птицефабрика",
+    "reference": "https://www.olx.kz/d/obyavlenie/v-prodazhe-yaytsa-vseh-kategoriy-IDo7azi.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца Алсад высшая категория",
+    "price": 65.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/yaytsa-kurinye-perepelinye-optom-IDoMNiO.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg",
+    "name": "Яйца Алсад отборные",
+    "price": 63.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/yaytsa-kurinye-perepelinye-optom-IDoMNiO.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "egg_perepel",
+    "name": "Яйцо перепелиное",
+    "price": 19.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/yaytsa-kurinye-perepelinye-optom-IDoMNiO.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Тушка цыпленок бройлер",
+    "price": 970.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Цыпленок табака",
+    "price": 970.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Окорочка",
+    "price": 970.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Крылышки монолит",
+    "price": 1190.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Куриные бедра",
+    "price": 770.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Куриное филе",
+    "price": 1270.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "chicken",
+    "name": "Филе утки стандарт",
+    "price": 1270.0,
+    "distributor": "Global Halal Food",
+    "reference": "https://www.olx.kz/d/obyavlenie/kurinoe-myaso-optom-okorochka-tushka-file-golen-IDoMNnU.html",
+    "city": "Unknown",
+    "category": "Poultry"
+  },
+  {
+    "tag": "beef",
+    "name": "Антрекот говядина",
+    "price": 2100.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Фарш говядина",
+    "price": 2700.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Грудинка говядина",
+    "price": 2100.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Ребра говядина",
+    "price": 2100.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Туша конина",
+    "price": 2300.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Грудинка конина",
+    "price": 2400.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Шужык конина",
+    "price": 3200.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Казы конина",
+    "price": 3800.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Жая конина",
+    "price": 3000.0,
+    "distributor": "Бейбут",
+    "reference": "https://www.olx.kz/d/obyavlenie/prodaetsya-myaso-govyadiny-i-koniny-vysshey-kategorii-po-nizkim-tsenam-IDjTbmZ.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Говядина мясо",
+    "price": 2200.0,
+    "distributor": "Айым",
+    "reference": "https://www.olx.kz/d/obyavlenie/myaso-govyadina-konina-shzhyk-farsh-govyazhyy-IDoQ8pM.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Конина мякоть без костей",
+    "price": 2800.0,
+    "distributor": "Айым",
+    "reference": "https://www.olx.kz/d/obyavlenie/myaso-govyadina-konina-shzhyk-farsh-govyazhyy-IDoQ8pM.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "horse_meat",
+    "name": "Шужык конина",
+    "price": 2800.0,
+    "distributor": "Айым",
+    "reference": "https://www.olx.kz/d/obyavlenie/myaso-govyadina-konina-shzhyk-farsh-govyazhyy-IDoQ8pM.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Фарш говядина",
+    "price": 2500.0,
+    "distributor": "Айым",
+    "reference": "https://www.olx.kz/d/obyavlenie/myaso-govyadina-konina-shzhyk-farsh-govyazhyy-IDoQ8pM.html",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "baranina",
+    "name": "Баранина ребра",
+    "price": 2350.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "baranina",
+    "name": "Баранина туша с курдюком",
+    "price": 2500.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "baranina",
+    "name": "Баранина туша без курдюка",
+    "price": 2400.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "baranina",
+    "name": "Баранина передок",
+    "price": 2350.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Говядина филе",
+    "price": 2500.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Говядина грудинка",
+    "price": 2400.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  },
+  {
+    "tag": "beef",
+    "name": "Говядина ребра",
+    "price": 2400.0,
+    "distributor": "Khan Et Talgar",
+    "reference": "https://www.instagram.com/khan_et_myaso/",
+    "city": "Unknown",
+    "category": "Meat"
+  }
+]
