@@ -8,6 +8,7 @@ const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const fs = require("fs");
+const { resolveUploadPath } = require("../utils/uploadPaths");
 
 // create product
 router.post(
@@ -69,7 +70,7 @@ router.delete(
 
       productData.images.forEach((imageUrl) => {
         const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
+        const filePath = resolveUploadPath(filename);
 
         fs.unlink(filePath, (err) => {
           if (err) {
@@ -118,24 +119,39 @@ router.put(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { user, rating, comment, productId, orderId } = req.body;
-
+      const numericRating = Number(rating);
       const product = await Product.findById(productId);
+      const order = await Order.findById(orderId);
+
+      if (!product) {
+        return next(new ErrorHandler("Товар не найден!", 404));
+      }
+
+      if (!order) {
+        return next(new ErrorHandler("Заказ не найден!", 404));
+      }
+
+      if (!Number.isFinite(numericRating) || numericRating < 1 || numericRating > 5) {
+        return next(new ErrorHandler("Оценка должна быть от 1 до 5!", 400));
+      }
 
       const review = {
         user,
-        rating,
+        rating: numericRating,
         comment,
         productId,
       };
 
       const isReviewed = product.reviews.find(
-        (rev) => rev.user._id === req.user._id
+        (rev) => String(rev.user?._id) === String(req.user._id)
       );
 
       if (isReviewed) {
         product.reviews.forEach((rev) => {
-          if (rev.user._id === req.user._id) {
-            (rev.rating = rating), (rev.comment = comment), (rev.user = user);
+          if (String(rev.user?._id) === String(req.user._id)) {
+            rev.rating = numericRating;
+            rev.comment = comment;
+            rev.user = user;
           }
         });
       } else {
@@ -152,11 +168,18 @@ router.put(
 
       await product.save({ validateBeforeSave: false });
 
-      await Order.findByIdAndUpdate(
-        orderId,
-        { $set: { "cart.$[elem].isReviewed": true } },
-        { arrayFilters: [{ "elem._id": productId }], new: true }
-      );
+      order.cart = order.cart.map((item) => {
+        if (String(item._id) === String(productId)) {
+          return {
+            ...item,
+            isReviewed: true,
+          };
+        }
+
+        return item;
+      });
+
+      await order.save({ validateBeforeSave: false });
 
       res.status(200).json({
         success: true,
@@ -201,7 +224,7 @@ router.delete(
 
       productData.images.forEach((imageUrl) => {
         const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
+        const filePath = resolveUploadPath(filename);
 
         fs.unlink(filePath, (err) => {
           if (err) {
@@ -227,4 +250,3 @@ router.delete(
 );
 
 module.exports = router;
-

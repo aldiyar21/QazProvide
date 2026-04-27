@@ -14,7 +14,6 @@ router.post(
     try {
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
 
-      // Group cart items by shopId
       const shopItemsMap = new Map();
 
       for (const item of cart) {
@@ -25,10 +24,9 @@ router.post(
         shopItemsMap.get(shopId).push(item);
       }
 
-      // Create an order for each shop
       const orders = [];
 
-      for (const [shopId, items] of shopItemsMap) {
+      for (const [, items] of shopItemsMap) {
         const order = await Order.create({
           cart: items,
           shippingAddress,
@@ -96,56 +94,65 @@ router.put(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const order = await Order.findById(req.params.id);
+      const nextStatus = req.body.status;
 
       if (!order) {
         return next(new ErrorHandler("Order not found with this id", 400));
       }
-      if (req.body.status === "Передано партнеру по доставке") {
-        order.cart.forEach(async (o) => {
-          await updateOrder(o._id, o.qty);
-        });
+
+      if (!order.stockUpdated && nextStatus && nextStatus !== "РћР±СЂР°Р±РѕС‚РєР°") {
+        for (const item of order.cart) {
+          await updateInventory(item._id, item.qty, "decrease");
+        }
+        order.stockUpdated = true;
       }
 
-      order.status = req.body.status;
+      order.status = nextStatus;
 
-      if (req.body.status === "Доставлено") {
+      if (nextStatus === "Р”РѕСЃС‚Р°РІР»РµРЅРѕ") {
         order.deliveredAt = Date.now();
-        order.paymentInfo.status = "Успешно";
+        order.paymentInfo = {
+          ...order.paymentInfo,
+          status: "РЈСЃРїРµС€РЅРѕ",
+        };
       }
 
       await order.save({ validateBeforeSave: false });
 
-      // Update seller's available balance
-      const shopId = order.cart[0].shopId; // Assuming all items in cart have the same shopId
-      await updateSellerInfo(shopId);
+      const shopId = order.cart[0]?.shopId;
+      if (shopId) {
+        await updateSellerInfo(shopId);
+      }
 
       res.status(200).json({
         success: true,
         order,
       });
 
-      async function updateOrder(id, qty) {
+      async function updateInventory(id, qty, action) {
         const product = await Product.findById(id);
 
-        product.stock -= qty;
-        product.sold_out += qty;
+        if (!product) return;
+
+        if (action === "decrease") {
+          product.stock = Math.max(0, product.stock - qty);
+          product.sold_out += qty;
+        }
 
         await product.save({ validateBeforeSave: false });
       }
 
       async function updateSellerInfo(shopId) {
-        // Fetch all orders for the given seller/shop
         const sellerOrders = await Order.find({ "cart.shopId": shopId });
 
-        // Calculate the total balance for all the orders
-        const totalBalance = sellerOrders.reduce((sum, order) => {
-          return sum + order.totalPrice * 0.9; // Assuming 10% service charge is deducted
+        const totalBalance = sellerOrders.reduce((sum, currentOrder) => {
+          return sum + currentOrder.totalPrice * 0.9;
         }, 0);
 
-        // Update the seller's available balance
         const seller = await Shop.findById(shopId);
-        seller.availableBalance = totalBalance;
+        if (!seller) return;
 
+        seller.availableBalance = totalBalance;
         await seller.save();
       }
     } catch (error) {
@@ -172,7 +179,7 @@ router.put(
       res.status(200).json({
         success: true,
         order,
-        message: "Запрос на возврат средств успешно выполнен!",
+        message: "Р—Р°РїСЂРѕСЃ РЅР° РІРѕР·РІСЂР°С‚ СЃСЂРµРґСЃС‚РІ СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРµРЅ!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -194,45 +201,47 @@ router.put(
 
       order.status = req.body.status;
 
-      await order.save();
+      if (req.body.status === "Refund Success" && order.stockUpdated) {
+        for (const item of order.cart) {
+          await updateInventory(item._id, item.qty);
+        }
+        order.stockUpdated = false;
+      }
 
-      res.status(200).json({
-        success: true,
-        message: "Возврат заказа выполнен успешно!",
-      });
+      await order.save({ validateBeforeSave: false });
 
-      if (req.body.status === "Refund Success") {
-        order.cart.forEach(async (o) => {
-          await updateOrder(o._id, o.qty);
-        });
-
-        // Update seller's available balance
-        const shopId = order.cart[0].shopId; // Assuming all items in cart have the same shopId
+      const shopId = order.cart[0]?.shopId;
+      if (shopId) {
         await updateSellerInfo(shopId);
       }
 
-      async function updateOrder(id, qty) {
+      res.status(200).json({
+        success: true,
+        message: "Р’РѕР·РІСЂР°С‚ Р·Р°РєР°Р·Р° РІС‹РїРѕР»РЅРµРЅ СѓСЃРїРµС€РЅРѕ!",
+      });
+
+      async function updateInventory(id, qty) {
         const product = await Product.findById(id);
 
+        if (!product) return;
+
         product.stock += qty;
-        product.sold_out -= qty;
+        product.sold_out = Math.max(0, product.sold_out - qty);
 
         await product.save({ validateBeforeSave: false });
       }
 
       async function updateSellerInfo(shopId) {
-        // Fetch all orders for the given seller/shop
         const sellerOrders = await Order.find({ "cart.shopId": shopId });
 
-        // Calculate the total balance for all the orders
-        const totalBalance = sellerOrders.reduce((sum, order) => {
-          return sum + order.totalPrice * 0.9; // Assuming 10% service charge is deducted
+        const totalBalance = sellerOrders.reduce((sum, currentOrder) => {
+          return sum + currentOrder.totalPrice * 0.9;
         }, 0);
 
-        // Update the seller's available balance
         const seller = await Shop.findById(shopId);
-        seller.availableBalance = totalBalance;
+        if (!seller) return;
 
+        seller.availableBalance = totalBalance;
         await seller.save();
       }
     } catch (error) {

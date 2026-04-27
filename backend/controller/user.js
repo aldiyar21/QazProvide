@@ -9,6 +9,7 @@ const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
+const { resolveUploadPath } = require("../utils/uploadPaths");
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
     if (userEmail) {
       // если пользователь уже существует, учетная запись не создается, а файл удаляется
       const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
+      const filePath = resolveUploadPath(filename);
       fs.unlink(filePath, (err) => {
         if (err) {
           console.log(err);
@@ -227,7 +228,7 @@ router.put(
     try {
       const existsUser = await User.findById(req.user.id);
 
-      const existAvatarPath = `uploads/${existsUser.avatar}`;
+      const existAvatarPath = resolveUploadPath(existsUser.avatar);
 
       fs.unlinkSync(existAvatarPath); // Удоляет предыдущее изображение
 
@@ -413,5 +414,4 @@ router.delete(
 );
 
 module.exports = router;
-
 

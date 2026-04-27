@@ -39,6 +39,10 @@ const orderSchema = new mongoose.Schema({
   deliveredAt: {
     type: Date,
   },
+  stockUpdated: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

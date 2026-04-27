@@ -6,7 +6,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
+const { UPLOADS_DIR, ensureUploadsDir } = require("./utils/uploadPaths");
 
 // config
 if (process.env.NODE_ENV !== "PRODUCTION") {
@@ -34,7 +34,8 @@ app.use(
   })
 );
 
-app.use("/", express.static("uploads"));
+ensureUploadsDir();
+app.use("/", express.static(UPLOADS_DIR));
 
 app.get("/test", (req, res) => {
   res.send("Hello World!");

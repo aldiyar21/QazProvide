@@ -3,7 +3,7 @@
   "name": "QazProvide - лучшие предложения",
   "icons": [
     {
-      "src": "http://localhost:8000/QazProvide-1776706496769-793664768.png",
+      "src": "http://localhost:8001/QazProvide-1776706496769-793664768.png",
       "type": "image/png",
       "sizes": "192x192 512x512"
     }

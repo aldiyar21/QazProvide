@@ -70,33 +70,43 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="group relative h-[390px] w-full cursor-pointer rounded-[24px] border border-[#eef0ea] bg-[linear-gradient(180deg,#ffffff_0%,#fbfcf8_100%)] p-3 shadow-[0_10px_30px_rgba(35,38,32,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(35,38,32,0.12)]">
         <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
           <img
             src={`${backend_url}${data.images && data.images[0]}`}
             alt="prd"
-            className="h-[170px] w-[280px] object-cover rounded-md"
+            className="h-[190px] w-full rounded-[18px] object-cover"
           />
         </Link>
-        <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
-        </Link>
+
+        <div className="pt-3">
+          <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
+            <h5 className="inline-flex rounded-full bg-[#f4f7ef] px-3 py-1 text-[13px] font-[600] text-[#5c7a44]">
+              {data.shop.name}
+            </h5>
+          </Link>
+        </div>
+
         <Link to={`/product/${data._id}`}>
-          <h4 className="pb-3 font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
+          <h4 className="pb-2 pt-3 text-[17px] font-[600] leading-6 text-[#22251f]">
+            {data.name.length > 40 ? `${data.name.slice(0, 40)}...` : data.name}
           </h4>
-          <div className="flex">
+
+          <div className="flex items-center">
             <Ratings rating={data?.ratings} />
+            <span className="text-[13px] text-[#6f756b]">
+              {data?.ratings ? Number(data.ratings).toFixed(1) : "0.0"}
+            </span>
           </div>
 
-          <div className="py-2 flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-between rounded-[18px] bg-[#f8f5ee] px-4 py-3">
             <div className="flex">
-              <h5 className={`${styles.productoriginalPrice}`}>{data.originalPrice} ₸</h5>
+              <h5 className={`${styles.productoriginalPrice}`}>{data.originalPrice} тг</h5>
               <h4 className={`${styles.price}`}>{data.unit}</h4>
             </div>
 
-            <span className="font-[400] text-[17px] text-[#68d284]">
-              Продано {data?.sold_out}
+            <span className="rounded-full bg-[#eaf7ea] px-3 py-1 text-[13px] font-[600] text-[#3c8b54]">
+              Продано {data?.sold_out || 0}
             </span>
           </div>
         </Link>
@@ -106,7 +116,7 @@ const ProductCard = ({ data, isEvent }) => {
             (click ? (
               <AiFillHeart
                 size={22}
-                className="cursor-pointer absolute right-1 top-5"
+                className="absolute right-4 top-5 cursor-pointer"
                 onClick={() => removeFromWishlistHandler(data)}
                 color="red"
                 title="Remove from wishlist"
@@ -114,7 +124,7 @@ const ProductCard = ({ data, isEvent }) => {
             ) : (
               <AiOutlineHeart
                 size={22}
-                className="cursor-pointer absolute right-1 top-5"
+                className="absolute right-4 top-5 cursor-pointer"
                 onClick={() => addToWishlistHandler(data)}
                 color="#333"
                 title="Add to wishlist"
@@ -123,7 +133,7 @@ const ProductCard = ({ data, isEvent }) => {
 
           <AiOutlineEye
             size={22}
-            className="cursor-pointer absolute right-1 top-14"
+            className="absolute right-4 top-14 cursor-pointer"
             onClick={() => setOpen(!open)}
             color="#333"
             title="Quick view"
@@ -132,7 +142,7 @@ const ProductCard = ({ data, isEvent }) => {
           {!isShoppingRestricted && (
             <AiOutlineShoppingCart
               size={25}
-              className="cursor-pointer absolute right-1 top-24"
+              className="absolute right-4 top-24 cursor-pointer"
               onClick={() => addToCartHandler(data._id)}
               color="#444"
               title="Add to cart"

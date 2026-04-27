@@ -21,7 +21,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-gray-400 text-sm pb-8">
-        <span>© 2024. Все права защищены.</span>
+        <span>© 2026. Все права защищены.</span>
       </div>
     </div>
   );

@@ -27,9 +27,9 @@ const Wishlist = ({ setOpenWishlist }) => {
   };
 
   const getItemsWord = (count) => {
-    if (count === 1) return "предмет";
-    if (count > 1 && count < 5) return "предмета";
-    return "предметов";
+    if (count === 1) return "товар";
+    if (count > 1 && count < 5) return "товара";
+    return "товаров";
   };
 
   return (
@@ -106,7 +106,7 @@ const CartSingle = ({
         <div className="flex-grow pl-[15px]">
           <h1>{data.name}</h1>
           <h4 className="font-[600] pt-3 text-[17px] text-[#2eb857] font-Roboto">
-            {totalPrice} ₸
+            {totalPrice} тг
           </h4>
         </div>
         {!isShoppingRestricted && (

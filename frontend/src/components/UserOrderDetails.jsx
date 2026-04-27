@@ -7,6 +7,7 @@ import axios from "axios";
 import { backend_url, server } from "../server";
 import { RxCross1 } from "react-icons/rx";
 import { getAllOrdersOfUser } from "../redux/actions/order";
+import { getAllProducts } from "../redux/actions/product";
 import { useDispatch, useSelector } from "react-redux";
 import { AiFillStar, AiOutlineMessage, AiOutlineStar } from "react-icons/ai";
 
@@ -49,8 +50,9 @@ const UserOrderDetails = () => {
 
       toast.success(res.data.message);
       dispatch(getAllOrdersOfUser(user._id));
+      dispatch(getAllProducts());
       setComment("");
-      setRating(null);
+      setRating(5);
       setOpen(false);
     } catch (error) {
       console.error(error); // Логирование ошибки в консоль для отладки
@@ -59,7 +61,7 @@ const UserOrderDetails = () => {
   };
 
   const combinedHandler = async () => {
-    if (rating > 1) {
+    if (rating >= 1) {
       await reviewHandler("product");
     }
   };
@@ -161,7 +163,12 @@ const UserOrderDetails = () => {
               {!item.isReviewed && data?.status === "Доставлено" ? (
                 <div
                   className={`${styles.button} text-[#fff]`}
-                  onClick={() => setOpen(true) || setSelectedItem(item)}
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setComment("");
+                    setRating(5);
+                    setOpen(true);
+                  }}
                 >
                   Написать отзыв
                 </div>
@@ -249,7 +256,7 @@ const UserOrderDetails = () => {
             </div>
             <div
               className={`${styles.button} text-white text-[20px] ml-3`}
-              onClick={rating > 1 ? combinedHandler : null}
+              onClick={rating >= 1 ? combinedHandler : null}
             >
               Отправить
             </div>

@@ -9,6 +9,7 @@ const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
+const { resolveUploadPath } = require("../utils/uploadPaths");
 
 const sendShopToken = require("../utils/shopToken");
 
@@ -20,7 +21,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
 
     if (sellerEmail) {
       const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
+      const filePath = resolveUploadPath(filename);
       fs.unlink(filePath, (err) => {
         if (err) {
           console.log(err);
@@ -211,7 +212,7 @@ router.put(
     try {
       const existsUser = await Shop.findById(req.seller._id);
 
-      const existAvatarPath = `uploads/${existsUser.avatar}`;
+      const existAvatarPath = resolveUploadPath(existsUser.avatar);
 
       fs.unlinkSync(existAvatarPath);
 
