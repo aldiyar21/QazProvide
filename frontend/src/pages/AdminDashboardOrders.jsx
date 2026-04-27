@@ -1,70 +1,62 @@
 import React, { useEffect } from "react";
 import AdminHeader from "../components/Layout/AdminHeader";
 import AdminSideBar from "../components/Admin/Layout/AdminSideBar";
-import { DataGrid } from "@material-ui/data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfAdmin } from "../redux/actions/order";
+import {
+  ModernDataGrid,
+  StatusBadge,
+  TablePanel,
+} from "../components/Common/ModernDataGrid";
 
 const AdminDashboardOrders = () => {
   const dispatch = useDispatch();
 
-  const { adminOrders, adminOrderLoading } = useSelector(
-    (state) => state.order
-  );
+  const { adminOrders } = useSelector((state) => state.order);
 
   useEffect(() => {
     dispatch(getAllOrdersOfAdmin());
-  }, []);
+  }, [dispatch]);
 
   const columns = [
-    { field: "id", headerName: "ID заказа", minWidth: 150, flex: 0.7 },
-
+    { field: "id", headerName: "ID заказа", minWidth: 190, flex: 1 },
     {
       field: "status",
       headerName: "Статус",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Доставлено"
-          ? "greenColor"
-          : "redColor";
-      },
+      minWidth: 160,
+      flex: 0.8,
+      renderCell: (params) => <StatusBadge status={params.value} />,
     },
     {
       field: "itemsQty",
-      headerName: "Кол-во товаров",
+      headerName: "Товаров",
       type: "number",
-      minWidth: 130,
-      flex: 0.7,
+      minWidth: 120,
+      flex: 0.6,
     },
-
     {
       field: "total",
       headerName: "Итого",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
+      minWidth: 140,
+      flex: 0.7,
     },
     {
       field: "createdAt",
       headerName: "Дата заказа",
-      type: "number",
-      minWidth: 130,
+      minWidth: 150,
       flex: 0.8,
     },
   ];
 
-  const row = [];
-  adminOrders &&
-    adminOrders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item?.cart?.reduce((acc, item) => acc + Number(item.qty), 0),
-        total: item?.totalPrice + " ₸",
-        status: item?.status,
-        createdAt: item?.createdAt.slice(0, 10),
-      });
-    });
+  const rows =
+    adminOrders?.map((item) => ({
+      id: item._id,
+      itemsQty: item?.cart?.reduce((acc, item) => acc + Number(item.qty), 0),
+      total: `${item?.totalPrice} ₸`,
+      status: item?.status,
+      createdAt: item?.createdAt?.slice(0, 10),
+    })) || [];
+
   return (
     <div>
       <AdminHeader />
@@ -74,16 +66,14 @@ const AdminDashboardOrders = () => {
             <AdminSideBar active={2} />
           </div>
 
-          <div className="w-full min-h-[45vh] pt-5 rounded flex justify-center">
-            <div className="w-[97%] flex justify-center">
-              <DataGrid
-                rows={row}
-                columns={columns}
-                pageSize={4}
-                disableSelectionOnClick
-                autoHeight
-              />
-            </div>
+          <div className="w-full">
+            <TablePanel
+              title="Все заказы"
+              subtitle="Административный обзор заказов по платформе: статус, количество товаров, сумма и дата."
+              metric={`${rows.length} заказов`}
+            >
+              <ModernDataGrid rows={rows} columns={columns} pageSize={10} />
+            </TablePanel>
           </div>
         </div>
       </div>

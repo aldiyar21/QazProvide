@@ -1,20 +1,35 @@
-import { DataGrid } from "@material-ui/data-grid";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
 import Loader from "../Layout/Loader";
+import { ModernDataGrid, TablePanel } from "../Common/ModernDataGrid";
 
 const formatDate = (value) => {
   if (!value) {
     return "-";
   }
 
-  return new Date(value).toLocaleDateString("en-GB", {
+  return new Date(value).toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 };
+
+const CustomerName = ({ name }) => (
+  <div className="flex items-center gap-3">
+    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#e9f6df] text-[14px] font-[800] text-[#148b36]">
+      {String(name || "К").charAt(0).toUpperCase()}
+    </div>
+    <span className="font-[800] text-[#173d21]">{name}</span>
+  </div>
+);
+
+const OrdersCount = ({ count }) => (
+  <span className="text-[13px] font-[800] text-[#247034]">
+    {count} заказов
+  </span>
+);
 
 const ShopCustomers = () => {
   const dispatch = useDispatch();
@@ -28,19 +43,25 @@ const ShopCustomers = () => {
   }, [dispatch, seller?._id]);
 
   const columns = [
-    { field: "name", headerName: "Имя клиента", minWidth: 190, flex: 1 },
-    { field: "phoneNumber", headerName: "Номер телефона", minWidth: 160, flex: 1 },
+    {
+      field: "name",
+      headerName: "Клиент",
+      minWidth: 220,
+      flex: 1,
+      renderCell: (params) => <CustomerName name={params.value} />,
+    },
+    { field: "phoneNumber", headerName: "Телефон", minWidth: 160, flex: 0.9 },
     { field: "email", headerName: "Эл. почта", minWidth: 220, flex: 1.2 },
     {
       field: "ordersCount",
-      headerName: "Количество заказов",
-      type: "number",
-      minWidth: 170,
-      flex: 0.8,
+      headerName: "Заказы",
+      minWidth: 150,
+      flex: 0.7,
+      renderCell: (params) => <OrdersCount count={params.value} />,
     },
     {
       field: "latestOrderDate",
-      headerName: "Дата последнего заказа",
+      headerName: "Последний заказ",
       minWidth: 170,
       flex: 0.9,
     },
@@ -82,33 +103,16 @@ const ShopCustomers = () => {
     }))
     .sort((a, b) => b.latestOrderTimestamp - a.latestOrderTimestamp);
 
-  return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className="w-full mx-8 pt-1 mt-10">
-          <div className="bg-white rounded shadow-sm p-5">
-            <div className="mb-5">
-              <h2 className="text-[24px] font-[600] text-[#111827]">
-                Клиенты, с которыми вы работали
-              </h2>
-              <p className="text-[14px] text-[#6b7280] mt-1">
-                Здесь можно посмотреть контакты клиентов, количество заказов и дату последнего заказа.
-              </p>
-            </div>
-
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={10}
-              disableSelectionOnClick
-              autoHeight
-            />
-          </div>
-        </div>
-      )}
-    </>
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <TablePanel
+      title="Клиенты"
+      subtitle="Контакты покупателей, количество заказов и дата последней покупки в вашем магазине."
+      metric={`${rows.length} клиентов`}
+    >
+      <ModernDataGrid rows={rows} columns={columns} pageSize={10} />
+    </TablePanel>
   );
 };
 

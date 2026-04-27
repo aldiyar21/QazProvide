@@ -1,14 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const ErrorHandler = require("../utils/ErrorHandler");
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
+const stripeApiKey = process.env.STRIPE_API_KEY?.trim();
+const stripe = stripeSecretKey ? require("stripe")(stripeSecretKey) : null;
 
 router.post(
   "/process",
   catchAsyncErrors(async (req, res, next) => {
+    if (!stripe) {
+      return next(new ErrorHandler("Stripe secret key is not configured", 500));
+    }
+
+    const amount = Number(req.body.amount);
+
+    if (!Number.isInteger(amount) || amount <= 0) {
+      return next(new ErrorHandler("Invalid payment amount", 400));
+    }
+
     const myPayment = await stripe.paymentIntents.create({
-      amount: req.body.amount,
+      amount,
       currency: "kzt",
       metadata: {
         company: "QazProvide",
@@ -24,7 +37,11 @@ router.post(
 router.get(
   "/stripeapikey",
   catchAsyncErrors(async (req, res, next) => {
-    res.status(200).json({ stripeApikey: process.env.STRIPE_API_KEY });
+    if (!stripeApiKey) {
+      return next(new ErrorHandler("Stripe publishable key is not configured", 500));
+    }
+
+    res.status(200).json({ stripeApikey: stripeApiKey });
   })
 );
 

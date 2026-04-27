@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "../../styles/styles";
 import {
   CardNumberElement,
   CardCvcElement,
@@ -10,45 +9,40 @@ import {
 } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { server } from "../../server";
 import { toast } from "react-toastify";
-import { RxCross1 } from "react-icons/rx";
+
+import styles from "../../styles/styles";
+import { server } from "../../server";
+
+const cardElementOptions = {
+  style: {
+    base: {
+      fontSize: "19px",
+      lineHeight: 1.5,
+      color: "#444",
+    },
+    empty: {
+      color: "#3a120a",
+      backgroundColor: "transparent",
+      "::placeholder": {
+        color: "#444",
+      },
+    },
+  },
+};
 
 const Payment = () => {
-  const [orderData, setOrderData] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [orderData, setOrderData] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
 
   useEffect(() => {
-    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
-    setOrderData(orderData);
+    const savedOrder = JSON.parse(localStorage.getItem("latestOrder"));
+    setOrderData(savedOrder);
   }, []);
-
-  // Pay-pal
-  const createOrder = (data, actions) => {
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            description: "Sunflower",
-            amount: {
-              currency_code: "KZT",
-              value: orderData?.totalPrice,
-            },
-          },
-        ],
-        // не требуется, если нужен адрес доставки
-        application_context: {
-          shipping_preference: "NO_SHIPPING",
-        },
-      })
-      .then((orderID) => {
-        return orderID;
-      });
-  };
 
   const order = {
     cart: orderData?.cart,
@@ -57,73 +51,94 @@ const Payment = () => {
     totalPrice: orderData?.totalPrice,
   };
 
-  const onApprove = async (data, actions) => {
-    return actions.order.capture().then(function (details) {
-      const { payer } = details;
-
-      let paymentInfo = payer;
-
-    });
-  };
-
-
-
-  const paymentData = {
-    amount: Math.round(orderData?.totalPrice * 100),
-  };
+  const getErrorMessage = (error) =>
+    error?.response?.data?.message ||
+    error?.message ||
+    "Не удалось провести оплату. Попробуйте еще раз.";
 
   const paymentHandler = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
+    if (!stripe || !elements) {
+      toast.info("Платежная форма еще загружается. Попробуйте через пару секунд.");
+      return;
+    }
+
+    const totalPrice = Number(orderData?.totalPrice);
+
+    if (!Number.isFinite(totalPrice) || totalPrice <= 0) {
+      toast.error("Не удалось определить сумму заказа. Вернитесь в корзину и оформите заказ заново.");
+      return;
+    }
+
+    const card = elements.getElement(CardNumberElement);
+
+    if (!card) {
+      toast.error("Введите данные карты перед оплатой.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.post(
         `${server}/payment/process`,
-        paymentData,
+        {
+          amount: Math.round(totalPrice * 100),
+        },
         config
       );
 
-      const client_secret = data.client_secret;
-
-      if (!stripe || !elements) return;
-      const result = await stripe.confirmCardPayment(client_secret, {
+      const result = await stripe.confirmCardPayment(data.client_secret, {
         payment_method: {
-          card: elements.getElement(CardNumberElement),
+          card,
         },
       });
 
       if (result.error) {
         toast.error(result.error.message);
-      } else {
-        if (result.paymentIntent.status === "succeeded") {
-          order.paymentInfo = {
+        return;
+      }
+
+      if (result.paymentIntent.status !== "succeeded") {
+        toast.error("Оплата не была подтверждена. Попробуйте еще раз.");
+        return;
+      }
+
+      await axios.post(
+        `${server}/order/create-order`,
+        {
+          ...order,
+          paymentInfo: {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
             type: "Credit Card",
-          };
+          },
+        },
+        config
+      );
 
-          await axios
-            .post(`${server}/order/create-order`, order, config)
-            .then((res) => {
-              setOpen(false);
-              navigate("/order/success");
-              toast.success("Успешный заказ!");
-              localStorage.setItem("cartItems", JSON.stringify([]));
-              localStorage.setItem("latestOrder", JSON.stringify([]));
-              window.location.reload();
-            });
-        }
-      }
+      navigate("/order/success");
+      toast.success("Заказ успешно оформлен!");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      window.location.reload();
     } catch (error) {
-      toast.error(error);
+      toast.error(getErrorMessage(error));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Обработка оплаты при доставке (COD)
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
 
@@ -131,22 +146,29 @@ const Payment = () => {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     };
 
-    order.paymentInfo = {
-      type: "Cash On Delivery",
-    };
+    try {
+      await axios.post(
+        `${server}/order/create-order`,
+        {
+          ...order,
+          paymentInfo: {
+            type: "Cash On Delivery",
+          },
+        },
+        config
+      );
 
-    await axios
-      .post(`${server}/order/create-order`, order, config)
-      .then((res) => {
-        setOpen(false);
-        navigate("/order/success");
-        toast.success("Успешный заказ!");
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
-      });
+      navigate("/order/success");
+      toast.success("Заказ успешно оформлен!");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      window.location.reload();
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (
@@ -155,11 +177,8 @@ const Payment = () => {
         <div className="w-full 800px:w-[65%]">
           <PaymentInfo
             user={user}
-            open={open}
-            setOpen={setOpen}
-            onApprove={onApprove}
-            createOrder={createOrder}
             paymentHandler={paymentHandler}
+            isSubmitting={isSubmitting}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
           />
         </div>
@@ -173,18 +192,14 @@ const Payment = () => {
 
 const PaymentInfo = ({
   user,
-  open,
-  setOpen,
-  onApprove,
-  createOrder,
   paymentHandler,
+  isSubmitting,
   cashOnDeliveryHandler,
 }) => {
   const [select, setSelect] = useState(1);
 
   return (
     <div className="w-full 800px:w-[95%] bg-[#fff] rounded-md p-5 pb-8">
-      {/* выбор кнопок */}
       <div>
         <div className="flex w-full pb-5 border-b mb-2">
           <div
@@ -200,7 +215,6 @@ const PaymentInfo = ({
           </h4>
         </div>
 
-        {/* оплата картой */}
         {select === 1 ? (
           <div className="w-full flex border-b">
             <form className="w-full" onSubmit={paymentHandler}>
@@ -209,7 +223,8 @@ const PaymentInfo = ({
                   <label className="block pb-2">Имя на карте</label>
                   <input
                     required
-                    value={user && user.name}
+                    readOnly
+                    value={user?.name || ""}
                     className={`${styles.input} !w-[95%]`}
                   />
                 </div>
@@ -217,22 +232,7 @@ const PaymentInfo = ({
                   <label className="block pb-2">Срок действия</label>
                   <CardExpiryElement
                     className={`${styles.input}`}
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: "19px",
-                          lineHeight: 1.5,
-                          color: "#444",
-                        },
-                        empty: {
-                          color: "#3a120a",
-                          backgroundColor: "transparent",
-                          "::placeholder": {
-                            color: "#444",
-                          },
-                        },
-                      },
-                    }}
+                    options={cardElementOptions}
                   />
                 </div>
               </div>
@@ -242,51 +242,24 @@ const PaymentInfo = ({
                   <label className="block pb-2">Номер карты</label>
                   <CardNumberElement
                     className={`${styles.input} !h-[35px] !w-[95%]`}
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: "19px",
-                          lineHeight: 1.5,
-                          color: "#444",
-                        },
-                        empty: {
-                          color: "#3a120a",
-                          backgroundColor: "transparent",
-                          "::placeholder": {
-                            color: "#444",
-                          },
-                        },
-                      },
-                    }}
+                    options={cardElementOptions}
                   />
                 </div>
                 <div className="w-[50%]">
                   <label className="block pb-2">CVV</label>
                   <CardCvcElement
                     className={`${styles.input} !h-[35px]`}
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: "19px",
-                          lineHeight: 1.5,
-                          color: "#444",
-                        },
-                        empty: {
-                          color: "#3a120a",
-                          backgroundColor: "transparent",
-                          "::placeholder": {
-                            color: "#444",
-                          },
-                        },
-                      },
-                    }}
+                    options={cardElementOptions}
                   />
                 </div>
               </div>
               <input
                 type="submit"
-                value="Отправить"
-                className={`${styles.button} !bg-[#f1357d] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[20px] font-[600] text-center`}
+                value={isSubmitting ? "Оплата..." : "Отправить"}
+                disabled={isSubmitting}
+                className={`${styles.button} !bg-[#f1357d] text-[#fff] h-[45px] rounded-[5px] ${
+                  isSubmitting ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+                } text-[20px] font-[600] text-center`}
               />
             </form>
           </div>
@@ -294,7 +267,6 @@ const PaymentInfo = ({
       </div>
 
       <br />
-      {/* оплата наличными при доставке */}
       <div>
         <div className="flex w-full pb-5 border-b mb-2">
           <div
@@ -310,7 +282,6 @@ const PaymentInfo = ({
           </h4>
         </div>
 
-        {/* оплата наличными при доставке */}
         {select === 3 ? (
           <div className="w-full flex">
             <form className="w-full" onSubmit={cashOnDeliveryHandler}>
@@ -328,14 +299,15 @@ const PaymentInfo = ({
 };
 
 const CartData = ({ orderData }) => {
-  const shipping = orderData?.shipping?.toFixed(2);
+  const shipping = Number(orderData?.shipping || 0).toFixed(2);
+
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">
           Промежуточный итог:
         </h3>
-        <h5 className="text-[18px] font-[600]">{orderData?.subTotalPrice}₸</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.subTotalPrice || 0}₸</h5>
       </div>
       <br />
       <div className="flex justify-between">
@@ -346,11 +318,11 @@ const CartData = ({ orderData }) => {
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Скидка:</h3>
         <h5 className="text-[18px] font-[600]">
-          {orderData?.originalPrice ? orderData.originalPrice + "₸" : "-"}
+          {orderData?.originalPrice ? `${orderData.originalPrice}₸` : "-"}
         </h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
-        {orderData?.totalPrice}₸
+        {orderData?.totalPrice || 0}₸
       </h5>
       <br />
     </div>

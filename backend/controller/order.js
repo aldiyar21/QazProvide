@@ -10,14 +10,39 @@ const Product = require("../model/product");
 // Create new order
 router.post(
   "/create-order",
+  isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
+
+      if (!Array.isArray(cart) || cart.length === 0) {
+        return next(new ErrorHandler("Cart is empty", 400));
+      }
+
+      if (!shippingAddress || Object.keys(shippingAddress).length === 0) {
+        return next(new ErrorHandler("Shipping address is required", 400));
+      }
+
+      if (!user || !user._id) {
+        return next(new ErrorHandler("User is required", 400));
+      }
+
+      if (String(user._id) !== String(req.user._id)) {
+        return next(new ErrorHandler("You can only create orders for your own account", 403));
+      }
+
+      if (!Number.isFinite(Number(totalPrice)) || Number(totalPrice) <= 0) {
+        return next(new ErrorHandler("Invalid order total", 400));
+      }
 
       const shopItemsMap = new Map();
 
       for (const item of cart) {
         const shopId = item.shopId;
+        if (!shopId) {
+          return next(new ErrorHandler("Product shopId is required", 400));
+        }
+
         if (!shopItemsMap.has(shopId)) {
           shopItemsMap.set(shopId, []);
         }
@@ -50,8 +75,13 @@ router.post(
 // Get all orders of user
 router.get(
   "/get-all-orders/:userId",
+  isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
+      if (String(req.user._id) !== String(req.params.userId) && req.user.role !== "Admin") {
+        return next(new ErrorHandler("You can only view your own orders", 403));
+      }
+
       const orders = await Order.find({ "user._id": req.params.userId }).sort({
         createdAt: -1,
       });
@@ -69,8 +99,13 @@ router.get(
 // Get all orders of seller
 router.get(
   "/get-seller-all-orders/:shopId",
+  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
+      if (String(req.seller._id) !== String(req.params.shopId)) {
+        return next(new ErrorHandler("You can only view your own shop orders", 403));
+      }
+
       const orders = await Order.find({
         "cart.shopId": req.params.shopId,
       }).sort({

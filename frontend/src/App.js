@@ -20,7 +20,6 @@ import {
   ShopLoginPage,
   OrderDetailsPage,
   TrackOrderPage,
-  UserInbox,
 } from "./routes/Routes";
 import {
   ShopDashboardPage,
@@ -130,7 +129,7 @@ const App = () => {
           path="/inbox"
           element={
             <ProtectedRoute>
-              <UserInbox />
+              <ProfilePage initialActive={4} />
             </ProtectedRoute>
           }
         />

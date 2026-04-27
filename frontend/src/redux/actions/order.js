@@ -8,9 +8,9 @@ export const getAllOrdersOfUser = (userId) => async (dispatch) => {
       type: "getAllOrdersUserRequest",
     });
 
-    const { data } = await axios.get(
-      `${server}/order/get-all-orders/${userId}`
-    );
+    const { data } = await axios.get(`${server}/order/get-all-orders/${userId}`, {
+      withCredentials: true,
+    });
 
     dispatch({
       type: "getAllOrdersUserSuccess",
@@ -32,7 +32,10 @@ export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
     });
 
     const { data } = await axios.get(
-      `${server}/order/get-seller-all-orders/${shopId}`
+      `${server}/order/get-seller-all-orders/${shopId}`,
+      {
+        withCredentials: true,
+      }
     );
 
     dispatch({

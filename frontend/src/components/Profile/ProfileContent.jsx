@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Country, State } from "country-state-city";
 import { getAllOrdersOfUser } from "../../redux/actions/order";
+import UserInbox from "../../pages/UserInbox";
 
 // Профильное содержимое
 const ProfileContent = ({ active }) => {
@@ -178,6 +179,12 @@ const ProfileContent = ({ active }) => {
       )}
 
       {/* Отслеживание заказа */}
+      {active === 4 && (
+        <div>
+          <UserInbox embedded />
+        </div>
+      )}
+
       {active === 5 && (
         <div>
           <TrackOrder />
